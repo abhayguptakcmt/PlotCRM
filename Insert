@@ -1,0 +1,250 @@
+<?php
+include 'new_head.php';
+include 'ConnectDB.php';
+//ob_start();
+    if (isset($_POST['Save'])) {
+        $Name = $_POST['Name'];
+        $Mobile = $_POST['Mobile'];
+        $Status = $_POST['Status'];
+        $Plottype = $_POST['Plottype'];
+        $Reference = $_POST['Reference'];
+        $Plot_no = $_POST['Plot_no'];
+        $Type = $_POST['Type'];
+        $Price = $_POST['Price'];
+        $Ownername = $_POST['Ownername'];
+        $Description = $_POST['Description'];
+
+        $q = "SELECT * FROM booking WHERE Plot_no='$Plot_no'";
+        $check = mysqli_query($conn,$q);
+        if (mysqli_num_rows($check) > 0) {
+            $_SESSION['error'] = "Record Already Exists!";
+        }
+        else
+        {
+            $i = rand(100,400);
+             $d = rand(300,700);
+             $id = "$i"."$d";
+             echo $id;
+        $query = "INSERT INTO `booking`(`Name`, `Mobile`, `Status`, `Plottype`, `Reference`, `Plot_no`, `Plot_type`, `Price`, `Ownername`, `Description`,`UniqeID`) VALUES ('$Name','$Mobile','$Status','$Plottype','$Reference','$Plot_no','$Type','$Price','$Ownername','$Description','$id')";
+        $sql = mysqli_query($conn,$query) OR die("Query Error");
+        if ($sql) {    
+             $_SESSION['message'] = "INSERTED SUCCESSFULLY";
+             $_SESSION['id'] = $id;
+        $re_query  = "UPDATE `property` SET `Status`='Sold',`Customer`='$Name',`Mobile`='$Mobile' WHERE Plot_No = '$Plot_no'";
+        $re_sql = mysqli_query($conn,$re_query) OR die("Query Error");
+        if ($re_sql) { 
+            //$_SESSION['message'] = "UPDATED SUCCESSFULLY";
+         }else{
+            die("Error to Update");
+         }
+         ?>
+<script type="text/javascript">
+alert("Calling12..");
+</script>
+<?php
+         
+        }
+        else
+        {
+            header('location:tables.php');
+            $_SESSION['error'] = "INSERTED FAILED!";
+            /*?>
+<script type="text/javascript">
+Windows.location.href("data.php");
+</script>
+<?php*/
+            //echo "<b>Error to insert</b>";
+            echo $query;
+        }
+    }
+}
+
+ ?>
+<div class="page-wrapper">
+  <!-- ============================================================== -->
+  <!-- Bread crumb and right sidebar toggle -->
+  <!-- ============================================================== -->
+  <div class="page-breadcrumb">
+    <div class="row">
+      <div class="col-12 d-flex no-block align-items-center">
+        <h4 class="page-title">Property</h4>
+        <center>
+          <?php 
+                        if (isset($_SESSION['message'])) {
+                            ?>
+          <div class="alert alert-success alert-dismissible fade show" role="alert" style="background-color: lightgreen; color: green; text-align: center; font-size: 17px;"><strong>&nbsp;&nbsp;</strong>
+            <?php echo $_SESSION['message'];?><strong>&nbsp;&nbsp;Your Booking ID is:&nbsp;&nbsp;</strong>
+            <?php echo $_SESSION['id'];?>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background-color: transparent; border: none;">
+              <span aria-hidden="true">&times;</span>
+              <?php
+                            unset($_SESSION['message']); ?>
+            </button>
+          </div>
+          <?php
+                        }
+                        ?>
+          <?php
+                        if (isset($_SESSION['error'])) {
+                            ?>
+          <div class="alert alert-warning alert-dismissible fade show" role="alert" style="background-color: #89769; text-align: center; color: red; border-style: none;">
+            <strong>
+              <?php echo $_SESSION['error'];?></strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="border-style: none; background-color: transparent;">
+              <span aria-hidden="true">&times;</span>
+              <?php
+                            unset($_SESSION['error']); ?>
+            </button>
+          </div>
+          <?php
+                            } 
+                        ?>
+        </center>
+        <div class="ms-auto text-end">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Booking</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <!-- ============================================================== -->
+    <!-- Start Page Content -->
+    <!-- ============================================================== -->
+    <?php
+               $s=mysqli_query($conn,"SELECT * FROM owc WHERE (Usertype='Customer') AND (Status='Clear' OR Status='MayBe')");
+                $name="";
+                while( $row = mysqli_fetch_array($s))
+                {
+                    $name .= '<option value="'.$row[1].'">'.$row[1].'</option>';
+                }
+
+                $q = mysqli_query($conn,"SELECT * FROM owc");
+
+
+                $s=mysqli_query($conn,"SELECT * FROM property WHERE Status = 'Clear'");
+                $option="";
+                while( $row = mysqli_fetch_array($s))
+                {
+                    $option .= '<option value="'.$row[1].'">'.$row[1].'</option>';
+                }
+                ?>
+    <div class="card">
+      <div class="card-body wizard-content">
+        <h4 class="card-title" style="color: BLUE">Booking Details</h4>
+        <h6 class="card-subtitle"></h6>
+        <form id="example-form" action="" method="POST" class="mt-5">
+          <div>
+            <h3>Customer Details</h3>
+            <section>
+              <label for="name">Name*</label>
+              <select class="required form-control" id="Name" name="Name" class="Name" onchange="sh(this.value)">
+                <option>Select</option>
+                <?php echo $name ?>
+              </select><br>
+              <label for="Mobile">Mobile*</label>
+              <input id="Mobile" name="Mobile" type="text" class="required form-control" placeholder="Contact"><br>
+              <label for="type">Status*</label>
+              <input type="text" class="required form-control" aria-hidden="true" name="Status" placeholder="Status" id="Status">
+              <br>
+              <label for="Plottype">Plot type*</label>
+              <input type="text" class="required form-control" aria-hidden="true" name="Plottype" placeholder="Plottype" id="Plottype"><br>
+              <label for="Reference">Reference*</label>
+              <textarea class="form-control" name="Reference" id="Reference"></textarea><br>
+            </section>
+            <h3>Plot Details</h3>
+            <section>
+              <label for="Plot No" id="Plot No">Plot No*</label>
+              <select class="required form-control" name="Plot_no" id="Plot_no" onchange="show(this.value);">
+                <option>Select</option>
+                <?php echo $option ?>
+              </select><br>
+              <label for="plottype">Plot type*</label>
+              <input id="Type" name="Type" type="text" class="required form-control" placeholder="Plottype"><br>
+              <label for="Price">Price*</label>
+              <input id="Price" name="Price" type="text" class="required form-control" placeholder="Price"><br>
+              <label for="Ownername">Owner_Name*</label>
+              <input id="Ownername" name="Ownername" type="text" class="required form-control" placeholder="Owner Name"><br>
+              <label for="Description">Description*</label>
+              <textarea class=" form-control" name="Description"></textarea><br>
+              <input type="submit" name="Save" value="Save">
+            </section>
+          </div>
+        </form>
+      </div>
+    </div>
+    <footer class="footer text-center">
+      All Rights Reserved
+    </footer>
+    <!-- ============================================================== -->
+    <!-- End footer -->
+    <!-- ============================================================== -->
+  </div>
+  <!-- ============================================================== -->
+  <!-- End Page wrapper  -->
+  <!-- ============================================================== -->
+</div>
+<!-- ============================================================== -->
+<!-- End Wrapper -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- All Jquery -->
+<!-- ============================================================== -->
+<script>
+function sh(str) {
+  if (str.length == 0) {
+    console.log("No data found for this user.");
+    return;
+  } else {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var mydb = JSON.parse(this.responseText);
+        console.log(mydb[0] + ' ' + mydb[1] + ' ' + mydb[2]);
+        var mobile = mydb[0];
+        var status = mydb[1];
+        var type = mydb[2];
+        var ref = mydb[3];
+        document.getElementById("Mobile").value = mobile;
+        document.getElementById("Status").value = status;
+        document.getElementById("Plottype").value = type;
+        document.getElementById("Reference").value = ref;
+
+      }
+    };
+    var q = +str;
+    xmlhttp.open("GET", "showdata.php?q=" + str, true);
+    xmlhttp.send();
+  }
+}
+</script>
+<script>
+function show(a) {
+  if (a.length == 0) {
+    console.log("No data found for this user.");
+    return;
+  } else {
+    var xmlhttps = new XMLHttpRequest();
+    xmlhttps.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        console.log(this.responseText);
+        var mydata = JSON.parse(this.responseText);
+        var Ownername = mydata[0];
+        var Type = mydata[1];
+        var Price = mydata[2];
+        document.getElementById("Ownername").value = Ownername;
+        document.getElementById("Type").value = Type;
+        document.getElementById("Price").value = Price;
+      }
+    };
+    var c = +a;
+    xmlhttps.open("GET", "showdata.php?c=" + a, true);
+    xmlhttps.send();
+  }
+}
+</script>
+<?php include 'footer.php' ?>
