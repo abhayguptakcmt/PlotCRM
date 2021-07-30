@@ -1,0 +1,15 @@
+<?php
+include 'ConnectDB.php';
+ob_start();
+if (isset($_GET['DELETE'])) {
+	$ID = $_GET['DELETE'];
+	$query= "DELETE FROM `owc` WHERE ID = '$ID'";
+	$data = mysqli_query($conn,$query) OR die("Query Error");
+	if ($data) {
+		?><script>
+			alert("DELETED..");
+		</script><?php
+		header("location:custTable.php");
+	}
+}
+?>
