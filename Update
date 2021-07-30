@@ -1,0 +1,210 @@
+<?php
+    include 'ConnectDB.php';
+    include 'new_head.php';
+if (isset($_GET['UPDATE'])) {
+        $ID = $_GET['UPDATE'];
+         $query = "SELECT * FROM `owc` WHERE ID=$ID";
+        $data = mysqli_query($conn,$query);
+        if ($row = mysqli_fetch_array($data)) {
+            $Name=$row['Name'];
+            $Mobile=$row['Mobile'];
+            $Email=$row['Email'];
+            $Dob=$row['Date_of_Birth'];
+            $Address=$row['Address'];
+            $Occupation=$row['Occupation'];
+            $City=$row['City'];
+            $Pin=$row['Pin_Code'];
+            $Reference=$row['Reference'];
+            $referenceContact=$row['Reference_Contact'];
+            $Status=$row['Status'];
+            $Usertype=$row['Usertype'];
+            $Type=$row['Plot_type'];
+            $Description=$row['Description'];
+        }
+    }
+if (isset($_POST['Update'])) {
+    ?>
+<script>alert("Calling");</script>
+<?php
+    $Name=$_POST['Name'];
+    $Mobile=$_POST['Mobile'];
+    $Email=$_POST['Email'];
+    $Dob=$_POST['Dob'];
+    $Address=$_POST['Address'];
+    $Occupation=$_POST['Occupation'];
+    $City=$_POST['City'];
+    $Pin=$_POST['Pin'];
+    $Reference=$_POST['Reference'];
+    $referenceContact=$_POST['referenceContact'];
+    $Status=$_POST['Status'];
+    $Usertype=$_POST['Usertype'];
+    $Type=$_POST['Type'];
+    $Description=$_POST['Description'];
+    $query="UPDATE `owc` SET `Name`='$Name',`Mobile`='$Mobile',`Email`='$Email',`Date_of_Birth`='$Dob',`Address`='$Address',`Occupation`='$Occupation',`City`='$City',`Pin_Code`='$Pin',`Reference`='$Reference',`Reference_Contact`='$referenceContact',`Status`='$Status',`Usertype`='$Usertype',`Plot_type`='$Type',`Description`='$Description'";
+   
+    $res=mysqli_query($conn,$query);
+    if ($res) {
+        //header("location:adminTable.php");
+        echo '<b>Inserted...</b>';
+        }
+        else {
+         die("Error");   
+        }
+    }
+?>
+<!-- ============================================================== -->
+<!-- End Left Sidebar - style you can find in sidebar.scss  -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- Page wrapper  -->
+<!-- ============================================================== -->
+<div class="page-wrapper">
+  <!-- ============================================================== -->
+  <!-- Bread crumb and right sidebar toggle -->
+  <!-- ============================================================== -->
+  <div class="page-breadcrumb">
+    <div class="row">
+      <div class="col-12 d-flex no-block align-items-center">
+        <h4 class="page-title">Form</h4>
+        <div class="ms-auto text-end">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="#">Customer</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Add Details</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ============================================================== -->
+  <!-- End Bread crumb and right sidebar toggle -->
+  <!-- ============================================================== -->
+  <!-- ============================================================== -->
+  <!-- Container fluid  -->
+  <!-- ============================================================== -->
+  <div class="container-fluid">
+    <!-- ============================================================== -->
+    <!-- Start Page Content -->
+    <!-- ============================================================== -->
+    <?php
+                                        $s=mysqli_query($conn,"SELECT * FROM status");
+                                        $status="";
+                                        while( $row = mysqli_fetch_array($s))
+                                          {
+                                            if($Status == $row[2])
+                                                $selected =  'selected';
+                                            else
+                                                $selected = '';
+                                            $status .= '<option value="'.$row[2].'" '.$selected.'>'.$row[2].'</option>';
+                                        }
+                                        $s=mysqli_query($conn,"SELECT * FROM type");
+
+                                        $option="";
+
+                                        while( $row = mysqli_fetch_array($s))
+                                          {
+                                            if($Type == $row[1])
+                                                $selected =  'selected';
+                                            else
+                                                $selected = '';
+                                            $option .= '<option value="'.$row[1].'" '.$selected.'>'.$row[1].'</option>';
+                                        }
+                                     ?>
+    <div class="card">
+      <div class="card-body wizard-content">
+        <h4 class="card-title" style="color: BLUE">Customer AND Owner Details</h4>
+        <h6 class="card-subtitle"></h6>
+        <form id="example-form" action="#" method="POST" class="mt-5">
+          <div>
+            <h3>Basic Details</h3>
+            <section>
+              <label for="name">Name*</label>
+              <input id="Name" name="Name" type="text" class="required form-control" placeholder="Customer/Owner Name" value="<?php echo $Name ?>"><br>
+              <label for="mobile">Mobile*</label>
+              <input id="Mobile" name="Mobile" type="text" class="required form-control" placeholder="Contact" value="<?php echo $Mobile ?>"><br>
+              <label for="Email" id="Email">Email*</label>
+              <input id="Email" name="Email" type="Email" class="required form-control" placeholder="Email" value="<?php echo $Email ?>"><br>
+              <label for="Date" id="Date">Date of Birth*</label>
+              <input id="Dob" name="Dob" type="text" class="required form-control" placeholder="Date of Birth" value="<?php echo $Dob ?>"><br>
+              <label for="Address" id="Address">Address*</label>
+              <input id="Address" name="Address" type="text" class="required form-control" placeholder="Address" value="<?php echo $Address ?>"><br>
+            </section>
+            <h3>Personal Details</h3>
+            <section>
+              <label for="Occupation" id="Occupation">Occupation*</label>
+              <input id="Occupation" name="Occupation" type="text" class="required form-control" placeholder="Occupation" value="<?php echo $Occupation ?>"><br>
+              <label for="City" id="City">City*</label>
+              <input id="City" name="City" type="text" class="required form-control" placeholder="City" value="<?php echo $City ?>"><br>
+              <label for="Pin" id="Pin">Pin Code*</label>
+              <input id="Pin" name="Pin" type="text" class="required form-control" placeholder="Pin Code" value="<?php echo $Pin ?>"><br>
+              <label for="Reference" id="Reference">Reference*</label>
+              <input id="Reference" name="Reference" type="text" class="required form-control" placeholder="Reference" value="<?php echo $Reference ?>"><br>
+              <label for="Reference" id="Reference">Reference*</label>
+              <input id="referenceContact" name="referenceContact" type="text" class="required form-control" placeholder="Contact" value="<?php echo $referenceContact ?>"><br>
+            </section>
+            <h3>Other Details</h3>
+            <section>
+              <label for="type">Status*</label>
+              <select class=" form-control" name="Status">
+                <option>Choose Customer Expression</option>
+                <?php echo $status ?>
+              </select><br>
+              <label for="Type">User-Type*</label>
+              <select class="required form-control" name="Usertype">
+                <option>Select</option>
+                <option value="Property_Owner" <?php if($Usertype=="Property_Owner" ) echo 'selected = "selected"' ; ?> >Property_Owner</option>
+                <option value="Customer" <?php if($Usertype=="Customer" ) echo 'selected = "selected"' ; ?>>Customer</option>
+              </select><br>
+              <label for="plotetype">Plot type*</label>
+              <select class="required form-control" name="Type">
+                <option>Select</option>
+                <?php echo $option ?>
+              </select><br>
+              <label for="Description">Description*</label>
+              <textarea class="form-control" name="Description" placeholder=""><?php echo $Description ?></textarea><br>
+              <div class="card">
+                <input type="submit" id="Update" name="Update" value="Update">
+            </section>
+          </div>
+      </div>
+      </form>
+    </div>
+  </div>
+  <!-- ============================================================== -->
+  <!-- End PAge Content -->
+  <!-- ============================================================== -->
+  <!-- ============================================================== -->
+  <!-- Right sidebar -->
+  <!-- ============================================================== -->
+  <!-- .right-sidebar -->
+  <!-- ============================================================== -->
+  <!-- End Right sidebar -->
+  <!-- ============================================================== -->
+</div>
+<!-- ============================================================== -->
+<!-- End Container fluid  -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- footer -->
+<!-- ============================================================== -->
+<footer class="footer text-center">
+  All Rights Reserved
+</footer>
+<!-- ============================================================== -->
+<!-- End footer -->
+<!-- ============================================================== -->
+</div>
+<!-- ============================================================== -->
+<!-- End Page wrapper  -->
+<!-- ============================================================== -->
+</div>
+<!-- ============================================================== -->
+<!-- End Wrapper -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- All Jquery -->
+<!-- ============================================================== -->
+<?php
+        include 'footer.php';
+    ?>
