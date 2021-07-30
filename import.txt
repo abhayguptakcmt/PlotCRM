@@ -1,0 +1,23 @@
+$conn= mysqli_connect();
+if(isset($_POST['import])){
+$filename = $_FILES['file']['temp_name'];
+
+if($_FILES['files']['size'] > 0){
+ $file = fopen($filename, "r");
+
+while(($column = fgetcsv($file,10000, ",")) !== FALSE){
+  $sqlInsert = "Insert into tablename (name,type) values('".$column[0]."','".$column[1]."')";
+   
+$result = mysqli_query($conn,$sqlInsert);
+   if(!empty($result)){
+	echo "Data Imported Successfully";
+     }
+   }
+ }
+}
+
+<form class="form-horizoontal" action="" method="POST" mane="uploadCsv" enctype="multipart/form-data">
+<div>
+<label>Choose Csv File</label>
+<input type="file name="file" accept=".csv">
+<buttton type = "submit name = "import"> Import </button>
