@@ -1,248 +1,252 @@
 <?php
-include 'new_head.php';
-include 'ConnectDB.php';
-//ob_start();
-    if (isset($_POST['Save'])) {
-        $Name = $_POST['Name'];
-        $Mobile = $_POST['Mobile'];
-        $Status = $_POST['Status'];
-        $Plottype = $_POST['Plottype'];
-        $Reference = $_POST['Reference'];
-        $Plot_no = $_POST['Plot_no'];
-        $Type = $_POST['Type'];
-        $Price = $_POST['Price'];
-        $Ownername = $_POST['Ownername'];
-        $Description = $_POST['Description'];
-
-        $q = "SELECT * FROM booking WHERE Plot_no='$Plot_no'";
-        $check = mysqli_query($conn,$q);
-        if (mysqli_num_rows($check) > 0) {
-            $_SESSION['error'] = "Record Already Exists!";
-        }
-        else
-        {
-            $i = rand(100,400);
-             $d = rand(300,700);
-             $id = "$i"."$d";
-             echo $id;
-        $query = "INSERT INTO `booking`(`Name`, `Mobile`, `Status`, `Plottype`, `Reference`, `Plot_no`, `Plot_type`, `Price`, `Ownername`, `Description`,`UniqeID`) VALUES ('$Name','$Mobile','$Status','$Plottype','$Reference','$Plot_no','$Type','$Price','$Ownername','$Description','$id')";
-        $sql = mysqli_query($conn,$query) OR die("Query Error");
-        if ($sql) {    
-             $_SESSION['message'] = "INSERTED SUCCESSFULLY";
-             $_SESSION['id'] = $id;
-        $re_query  = "UPDATE `property` SET `Status`='Sold',`Customer`='$Name',`Mobile`='$Mobile' WHERE Plot_No = '$Plot_no'";
-        $re_sql = mysqli_query($conn,$re_query) OR die("Query Error");
-        if ($re_sql) { 
-            //$_SESSION['message'] = "UPDATED SUCCESSFULLY";
-         }else{
-            die("Error to Update");
-         }
+    include 'new_head.php';
+    include 'ConnectDB.php';
+    if(isset($_POST['Save'])){
+      ?>
+            <script>
+               alert('Calling...');
+            </script>
+         <?php  
+        $Plot_no=$_POST['Plot_no'];
+        $Ownername=$_POST['Ownername'];
+        $Type=$_POST['Type'];
+        $Block=$_POST['Block'];
+        $Ratch=$_POST['Ratch'];
+        $Corner=$_POST['Corner'];
+        $Park=$_POST['Park'];
+        $Status=$_POST['Status'];
+        $Length=$_POST['Length'];
+        $Width=$_POST['Width'];
+        $W_road=$_POST['W_road'];
+        $Road_size=$_POST['Road_size'];
+        $Squrefeet=$_POST['Squrefeet'];
+        $Price=$_POST['Price'];
+       $query="INSERT INTO `property`(`Plot_No`, `Owner_Name`, `Type`, `Block`, `Ratch`, `Corner`, `Park_Facing`, `Status`, `Length`, `Width`, `Road_Area`, `Road_Size`, `Squre_Feet`,`Price`) VALUES ('$Plot_no','$Ownername','$Type','$Block','$Ratch','$Corner','$Park','$Status','$Length','$Width','$W_road','$Road_size','$Squrefeet','$Price') ";
+        
+        $res=mysqli_query($conn,$query);
+        if($res)
+         { 
+         //echo '<b> INSERTED...</b>';
          ?>
-
-<?php
-         
+            <script>
+               alert('INSERTED...');
+            </script>
+         <?php  
         }
         else
         {
-            header('location:tables.php');
-            $_SESSION['error'] = "INSERTED FAILED!";
-            /*?>
-<script type="text/javascript">
-Windows.location.href("data.php");
-</script>
-<?php*/
-            //echo "<b>Error to insert</b>";
+            echo '<script>alert("Error...");</script>';
             echo $query;
         }
     }
-}
+    if (isset($_GET['draw'])) {
+        ?><script type="text/javascript"> alert("Calling");</script><?php
+        ?><script type="text/javascript"> alert($_GET['backend']);</script><?php
+        $label = $_GET['label'];
+        $backend = $_GET['backend'];
+        $draw = $_GET['draw'];
 
- ?>
-<div class="page-wrapper">
-  <!-- ============================================================== -->
-  <!-- Bread crumb and right sidebar toggle -->
-  <!-- ============================================================== -->
-  <div class="page-breadcrumb">
-    <div class="row">
-      <div class="col-12 d-flex no-block align-items-center">
-        <h4 class="page-title">Property</h4>
-        <center>
-          <?php 
-                        if (isset($_SESSION['message'])) {
-                            ?>
-          <div class="alert alert-success alert-dismissible fade show" role="alert" style="background-color: lightgreen; color: green; text-align: center; font-size: 17px;"><strong>&nbsp;&nbsp;</strong>
-            <?php echo $_SESSION['message'];?><strong>&nbsp;&nbsp;Your Booking ID is:&nbsp;&nbsp;</strong>
-            <?php echo $_SESSION['id'];?>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background-color: transparent; border: none;">
-              <span aria-hidden="true">&times;</span>
-              <?php
-                            unset($_SESSION['message']); ?>
-            </button>
-          </div>
-          <?php
-                        }
-                        ?>
-          <?php
-                        if (isset($_SESSION['error'])) {
-                            ?>
-          <div class="alert alert-warning alert-dismissible fade show" role="alert" style="background-color: #89769; text-align: center; color: red; border-style: none;">
-            <strong>
-              <?php echo $_SESSION['error'];?></strong>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="border-style: none; background-color: transparent;">
-              <span aria-hidden="true">&times;</span>
-              <?php
-                            unset($_SESSION['error']); ?>
-            </button>
-          </div>
-          <?php
-                            } 
-                        ?>
-        </center>
-        <div class="ms-auto text-end">
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Booking</li>
-            </ol>
-          </nav>
+        
+     }
+    ?>
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Page wrapper  -->
+        <!-- ============================================================== -->
+        <div class="page-wrapper">
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <div class="page-breadcrumb">
+                <div class="row">
+                    <div class="col-12 d-flex no-block align-items-center">
+                        <h4 class="page-title">Form</h4>
+                        <div class="ms-auto text-end">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="#">Property</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Add Property</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                                     <?php
+                                        $s=mysqli_query($conn,"SELECT * FROM type");
+
+                                        $option="";
+
+                                        while( $row = mysqli_fetch_array($s))
+                                          {
+                                            $option .= '<option value="'.$row[1].'">'.$row[1].'</option>';
+                                        }
+                                        $s=mysqli_query($conn,"SELECT * FROM status");
+
+                                        $status="";
+
+                                        while( $row = mysqli_fetch_array($s) )
+                                          {
+                                            $status .= '<option value="'.$row[2].'">'.$row[2].'</option>';
+                                        }
+                                        $s=mysqli_query($conn,"SELECT * FROM owc WHERE Usertype='Property_Owner'");
+
+                                        $nm="";
+
+                                        while( $row = mysqli_fetch_array($s) )
+                                          {
+                                            $nm .= '<option value="'.$row[1].'">'.$row[1].'</option>';
+                                        }
+                                     ?>
+                <div class="card">
+                    <div class="card-body wizard-content">
+                        <h4 class="card-title">Property Details</h4>
+                        <h6 class="card-subtitle"></h6>
+                        <form id="example-form" action="#" method="POST" class="mt-5">
+
+                            <div>
+                                
+                                <h3></h3>
+                                <section>
+                                    <label for="name">Plot No*</label>
+                                    <input id="Plot_no" name="Plot_no" type="text" class="required form-control" placeholder="Property ID"><br>
+
+                                    <label for="ownername">Owner Name*</label>
+                                    <select class="required form-control" name="Ownername">
+                                    <option>Select</option>
+                                    <option>MRM Group</option>
+                                    <?php //echo $nm ?>
+                                    </select><br>
+
+                                    <label for="type">Type*</label>
+                                    <select class="required form-control" required="" name="Type">
+                                    <option>Select</option>
+                                    <?php echo $option ?>
+                                    </select><br>
+
+                                    <label for="name">Block*</label>
+                                    <input name="Block" type="text" class="required form-control" placeholder="Block" required=""><br>
+                                </section>
+                                <h3></h3>
+                                <section>
+                                    <label for="ratch">Ratch*</label>
+                                    <select class="required form-control" name="Ratch">
+                                        <option>Yes</option>
+                                        <option>No</option>
+                                    </select><br>
+
+                                    <label for="plottype">Corner Plot*</label>
+                                    <select class="required form-control" name="Corner">
+                                   <option>Yes</option>
+                                    <option>No</option>
+                                    </select><br>
+
+                                    <label for="plot">Park Facing*</label>
+                                    <select class="required form-control" id="Park" name="Park">
+                                    <option>Yes</option>
+                                    <option>No</option>
+                                    </select><br>
+
+                                    <label for="Status">Status*</label>
+                                    <select class="required form-control" id="Status" name="Status">
+                                    <option>Select</option>
+                                    <?php echo $status ?>
+                                    </select><br>
+                                    </section>
+
+                                    <h3></h3>
+                                    <section class = "add">
+                                    <label for="dimension">Dimension*</label>
+                                    <input id="Length" name="Length" type="text" name="Length"  placeholder="Length">&nbsp;&nbsp;&nbsp;
+      
+                                    <input id="Width" name="Width" type="text" name="Width"  placeholder="Width">&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <br>
+
+                                    <input type="checkbox" id="with" name="W_road" value="With Road">&nbsp;&nbsp;With Road &nbsp;&nbsp;&nbsp;&nbsp;
+
+                                    <input type="checkbox" id="without" name="W_road" value="Without Road">&nbsp;&nbsp;Without Road<br>
+
+                                    <label for="road_size">Road Size*</label>
+                                    <input id="Road_size" name="Road_size" type="text" class="required form-control" placeholder="Road Size"><br>
+
+                                    <label for="squrefeet">Squre Feet*</label>
+                                    <input id="Squrefeet" name="Squrefeet" type="text" class="required form-control" placeholder="Squre Feet"><br>
+
+                                    <label for="Price">Price*</label>
+                                    <input id="Price" name="Price" type="text" class="required form-control" placeholder="Price"><br>
+
+                                    <a href="">
+                                    <input type="submit" class="btn btn-primary" name="Save" value="Save"></a>
+                                    <button class = "bt" value="Draw" name="dr"></button>
+                              </section>
+                        </form>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End PAge Content -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Right sidebar -->
+                <!-- ============================================================== -->
+                <!-- .right-sidebar -->
+                <!-- ============================================================== -->
+                <!-- End Right sidebar -->
+                <!-- ============================================================== -->
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <footer class="footer text-center">
+                All Rights Reserved
+            </footer>
+            <!-- ============================================================== -->
+            <!-- End footer -->
+            <!-- ============================================================== -->
         </div>
-      </div>
+        <!-- ============================================================== -->
+        <!-- End Page wrapper  -->
+        <!-- ============================================================== -->
     </div>
-  </div>
-  <div class="container-fluid">
     <!-- ============================================================== -->
-    <!-- Start Page Content -->
+    <!-- End Wrapper -->
     <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var cl = $(".add");
+            var button = $(".bt");
+            var x = 1;
+            $(button).click(function(e){
+                e.preventDefault();
+                if(x < 12){
+                    $(cl).append('<section> <label for="Price"><?php $label ?></label><input id="Price" name="<?php $backend ?>" type="text" class="required form-control" placeholder="<?php $backend ?>"><br></section>');
+                    x++;
+                }
+            });
+            $(cl).on("click",".remove_field()",function(e){
+                e.preventDefault();
+                $(this).parent('section').remove();
+                x--;
+            })
+        });
+    </script>
     <?php
-               $s=mysqli_query($conn,"SELECT * FROM owc WHERE (Usertype='Customer') AND (Status='Clear' OR Status='MayBe')");
-                $name="";
-                while( $row = mysqli_fetch_array($s))
-                {
-                    $name .= '<option value="'.$row[1].'">'.$row[1].'</option>';
-                }
-
-                $q = mysqli_query($conn,"SELECT * FROM owc");
-
-
-                $s=mysqli_query($conn,"SELECT * FROM property WHERE Status = 'Clear'");
-                $option="";
-                while( $row = mysqli_fetch_array($s))
-                {
-                    $option .= '<option value="'.$row[1].'">'.$row[1].'</option>';
-                }
-                ?>
-    <div class="card">
-      <div class="card-body wizard-content">
-        <h4 class="card-title" style="color: BLUE">Booking Details</h4>
-        <h6 class="card-subtitle"></h6>
-        <form id="example-form" action="" method="POST" class="mt-5">
-          <div>
-            <h3>Customer Details</h3>
-            <section>
-              <label for="name">Name*</label>
-              <select class="required form-control" id="Name" name="Name" class="Name" onchange="sh(this.value)">
-                <option>Select</option>
-                <?php echo $name ?>
-              </select><br>
-              <label for="Mobile">Mobile*</label>
-              <input id="Mobile" name="Mobile" type="text" class="required form-control" placeholder="Contact"><br>
-              <label for="type">Status*</label>
-              <input type="text" class="required form-control" aria-hidden="true" name="Status" placeholder="Status" id="Status">
-              <br>
-              <label for="Plottype">Plot type*</label>
-              <input type="text" class="required form-control" aria-hidden="true" name="Plottype" placeholder="Plottype" id="Plottype"><br>
-              <label for="Reference">Reference*</label>
-              <textarea class="form-control" name="Reference" id="Reference"></textarea><br>
-            </section>
-            <h3>Plot Details</h3>
-            <section>
-              <label for="Plot No" id="Plot No">Plot No*</label>
-              <select class="required form-control" name="Plot_no" id="Plot_no" onchange="show(this.value);">
-                <option>Select</option>
-                <?php echo $option ?>
-              </select><br>
-              <label for="plottype">Plot type*</label>
-              <input id="Type" name="Type" type="text" class="required form-control" placeholder="Plottype"><br>
-              <label for="Price">Price*</label>
-              <input id="Price" name="Price" type="text" class="required form-control" placeholder="Price"><br>
-              <label for="Ownername">Owner_Name*</label>
-              <input id="Ownername" name="Ownername" type="text" class="required form-control" placeholder="Owner Name"><br>
-              <label for="Description">Description*</label>
-              <textarea class=" form-control" name="Description"></textarea><br>
-              <input type="submit" name="Save" value="Save">
-            </section>
-          </div>
-        </form>
-      </div>
-    </div>
-    <footer class="footer text-center">
-      All Rights Reserved
-    </footer>
-    <!-- ============================================================== -->
-    <!-- End footer -->
-    <!-- ============================================================== -->
-  </div>
-  <!-- ============================================================== -->
-  <!-- End Page wrapper  -->
-  <!-- ============================================================== -->
-</div>
-<!-- ============================================================== -->
-<!-- End Wrapper -->
-<!-- ============================================================== -->
-<!-- ============================================================== -->
-<!-- All Jquery -->
-<!-- ============================================================== -->
-<script>
-function sh(str) {
-  if (str.length == 0) {
-    console.log("No data found for this user.");
-    return;
-  } else {
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        var mydb = JSON.parse(this.responseText);
-        console.log(mydb[0] + ' ' + mydb[1] + ' ' + mydb[2]);
-        var mobile = mydb[0];
-        var status = mydb[1];
-        var type = mydb[2];
-        var ref = mydb[3];
-        document.getElementById("Mobile").value = mobile;
-        document.getElementById("Status").value = status;
-        document.getElementById("Plottype").value = type;
-        document.getElementById("Reference").value = ref;
-
-      }
-    };
-    var q = +str;
-    xmlhttp.open("GET", "showdata.php?q=" + str, true);
-    xmlhttp.send();
-  }
-}
-</script>
-<script>
-function show(a) {
-  if (a.length == 0) {
-    console.log("No data found for this user.");
-    return;
-  } else {
-    var xmlhttps = new XMLHttpRequest();
-    xmlhttps.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        console.log(this.responseText);
-        var mydata = JSON.parse(this.responseText);
-        var Ownername = mydata[0];
-        var Type = mydata[1];
-        var Price = mydata[2];
-        document.getElementById("Ownername").value = Ownername;
-        document.getElementById("Type").value = Type;
-        document.getElementById("Price").value = Price;
-      }
-    };
-    var c = +a;
-    xmlhttps.open("GET", "showdata.php?c=" + a, true);
-    xmlhttps.send();
-  }
-}
-</script>
-<?php include 'footer.php' ?>
+        include 'footer.php';
+    ?>
