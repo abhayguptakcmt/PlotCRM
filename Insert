@@ -38,9 +38,7 @@ include 'ConnectDB.php';
             die("Error to Update");
          }
          ?>
-<script type="text/javascript">
-alert("Calling12..");
-</script>
+
 <?php
          
         }
